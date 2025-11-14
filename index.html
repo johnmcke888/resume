@@ -1,72 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>John McKenna - Product & Data Analyst</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>John McKenna - Analytical Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
     <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #fafafa;
+            --accent-color: #4299e1;
+            --border-color: #333;
+            --font-main: 'JetBrains+Mono', monospace;
+        }
+
+        body.light-mode {
+            --bg-color: #fafafa;
+            --text-color: #0a0a0a;
+            --accent-color: #3182ce;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
         body {
-            font-family: 'Inter', sans-serif;
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-main);
+            font-size: 1rem;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: left;
+            padding: 1.5rem 2rem;
+            min-height: 100vh;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                justify-content: center;
+            }
+        }
+
+        .hub-container {
+            max-width: 70ch;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- UPDATED SUBTITLE --- */
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--accent-color);
+            margin-bottom: 1.25rem;
+        }
+
+        /* --- UPDATED INTRO --- */
+        p.intro {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .qa-nav {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 2rem;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 1.25rem;
+        }
+
+        .qa-nav h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+            transition: text-decoration 0.3s ease;
+        }
+
+        .qa-nav .qa-link {
+            display: block;
+            margin-bottom: 1.25rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 400;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .qa-nav .qa-link p {
+            opacity: 0.9;
+            margin-bottom: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .qa-nav .qa-link:hover {
+            color: var(--text-color);
+            background: none;
+            text-decoration: none;
+            opacity: 1;
+        }
+
+        .qa-nav .qa-link:hover h2 {
+            text-decoration: underline;
+        }
+
+        .qa-nav .qa-link:hover p {
+            opacity: 1;
+        }
+
+        /* --- REMOVED ARROWS (Claude was right, they're redundant) --- */
+        .qa-nav .qa-link .arrow {
+            display: none;
+        }
+
+        .secondary-nav {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 1.25rem;
+        }
+
+        .secondary-nav li {
+            margin-bottom: 0;
+        }
+
+        .secondary-nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .secondary-nav a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+            background-color: transparent;
+        }
+
+        /* --- ADDED JOB TITLE (Claude's idea) --- */
+        .current-role {
+            font-size: 0.9rem;
+            opacity: 0.6;
+            margin-top: 2rem;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 1.25rem;
+        }
+
+        .floating-theme-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 1000;
+            background: var(--border-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-family: var(--font-main);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        body:not(.light-mode) .floating-theme-toggle {
+            background: var(--border-color);
+            color: #fafafa;
+        }
+
+        body.light-mode .floating-theme-toggle {
+            background: var(--border-color);
+            color: #0a0a0a;
+        }
+
+        .floating-theme-toggle:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+            transform: scale(1.1);
+        }
+
+        .floating-theme-toggle svg {
+            margin: 0;
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 min-h-screen flex items-center justify-center">
-    
-    <div class="container mx-auto max-w-3xl px-6">
-        <div class="text-center">
-            <!-- Animated Icon -->
-            <div class="mb-8">
-                <svg class="w-24 h-24 mx-auto text-blue-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-                </svg>
-            </div>
 
-            <!-- Main Content -->
-            <h1 class="text-5xl md:text-6xl font-bold text-white mb-4">
-                John McKenna
-            </h1>
-            <p class="text-2xl md:text-3xl text-blue-300 mb-8">
-                Product & Data Analyst
-            </p>
-            
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 mb-8 border border-white/20">
-                <p class="text-xl text-slate-200 mb-6">
-                    Portfolio website coming soon
+<body>
+
+    <div class="hub-container">
+        <h1>John McKenna</h1>
+        <p class="subtitle">Data Analyst | iGaming Enthusiast</p>
+
+        <p class="intro">
+            I'm a data analyst focused on iGaming - promotional economics, game mechanics, and player psychology. I work in analytical roles at Linde Electronics (B.S. Chemical Engineering) but spend my time outside work doing product analysis on casino systems. I direct development of analytical tools when I need them, but the work is about finding signal in noise: turning confusing promotional structures into clear insights.
+        </p>
+
+        <!-- New Q&A Navigation -->
+        <div class="qa-nav">
+            <a href="why-applying.html" class="qa-link">
+                <h2>Why this career pivot?</h2>
+                <p>
+                    I was building tools and analyzing promotional economics in my spare time because I found it fascinating. While writing strategic feedback to my VIP host about casino reward structures, I realized I was already doing product analysis work - I just wasn't getting paid for it.
                 </p>
-                <p class="text-slate-300">
-                    Building something great. Check back in a few days.
+            </a>
+
+            <a href="resume.html" class="qa-link">
+                <h2>How do my skills translate?</h2>
+                <p>
+                    Five years of analytical work at Linde Electronics: data integrity, statistical process control, translating technical findings for stakeholders. Chemical Engineering degree provides quantitative rigor. My advantage is authentic domain expertise - I understand the product from a user's perspective, not just spreadsheets.
                 </p>
-            </div>
+            </a>
 
-            <!-- Contact Links -->
-            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
-                <a href="mailto:mckennaengr@gmail.com" 
-                   class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    Email Me
-                </a>
-                
-                <a href="tel:848-333-3623" 
-                   class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors border border-white/30 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    (848) 333-3623
-                </a>
-            </div>
-
-            <!-- Footer -->
-            <p class="mt-12 text-slate-400 text-sm">
-                EIT-Certified Chemical Engineer | Data Analytics | iGaming Expertise
-            </p>
+            <a href="projects.html" class="qa-link">
+                <h2>What do I build?</h2>
+                <p>
+                    Eight analytical tools across different domains, all solving the same problem: turning opacity into actionable clarity. Baccarat Promotion Analyzer, Balloon Betting Calculator, Multi-Casino Performance Tracker, Deal Optimization Engine. I'm drawn to systems that intentionally hide value behind complexity.
+                </p>
+            </a>
         </div>
+
+        <ul class="secondary-nav">
+            <li><a href="resume.pdf">Resume (PDF)</a></li>
+            <li><a href="mailto:mckennaengr@gmail.com">mckennaengr@gmail.com</a></li>
+            <li><a href="tel:8483333623">(848) 333-3623</a></li>
+        </ul>
+
+        <!-- ADDED CURRENT ROLE (Claude's idea, it's good) -->
+        <p class="current-role">
+            Currently: Quality Control Lab Technician II at Linde Electronics | Easton, PA
+        </p>
+
     </div>
 
+    <!-- New Floating Theme Toggle Button -->
+    <button id="floating-theme-toggle" class="floating-theme-toggle" title="Toggle dark/light mode">
+        <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path
+                d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707z" />
+        </svg>
+        <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            viewBox="0 0 16 16" style="display:none;">
+            <path
+                d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278zM4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.021 3.278 7.277 7.318 7.277a7.316 7.316 0 0 0 5.205-2.149A8.507 8.507 0 0 1 8.344 15C4.234 15 1 11.766 1 7.71 1 5.25 2.414 3.05 4.858 1.311z" />
+        </svg>
+    </button>
+
+    <script>
+        // JS for the theme toggle
+        const themeToggle = document.getElementById('floating-theme-toggle');
+        const body = document.body;
+        const sunIcon = document.getElementById('theme-icon-sun');
+        const moonIcon = document.getElementById('theme-icon-moon');
+
+        function setTheme(theme) {
+            if (theme === 'light') {
+                body.classList.add('light-mode');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-mode');
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const isLight = body.classList.contains('light-mode');
+            setTheme(isLight ? 'dark' : 'light');
+        });
+    </script>
+
 </body>
+
 </html>
