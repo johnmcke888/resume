@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- NEW, SAFER TITLE -->
+    <title>Project: Promotional Value Modeler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- All the styling is identical to your original files for consistency -->
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #fafafa;
+            --accent-color: #4299e1;
+            --border-color: #333;
+            --font-main: 'JetBrains Mono', monospace;
+        }
+
+        body.light-mode {
+            --bg-color: #fafafa;
+            --text-color: #0a0a0a;
+            --accent-color: #3182ce;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html { scroll-behavior: smooth; }
+        html, body { min-height: 100%; }
+
+        body {
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 70ch;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--accent-color);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-link:hover { opacity: 0.7; }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2.5rem; /* A bit more space */
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        /* --- This is the new "Key Details" block --- */
+        .key-details {
+            background: var(--border-color);
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            margin: 2rem 0;
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .key-details p {
+            margin-bottom: 0.5rem; /* Tighter spacing */
+        }
+        
+        .key-details strong {
+            color: var(--accent-color);
+            margin-right: 0.5rem;
+        }
+
+        /* --- Button Style for "View Project" --- */
+        .project-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--accent-color);
+        }
+
+        .project-button:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+        }
+
+        /* Horizontal Timeline (Unchanged from your file) */
+        .timeline-container {
+            margin: 2rem 0;
+            padding: 1.5rem 0;
+        }
+
+        .timeline-track {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 0;
+        }
+
+        .timeline-point {
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--border-color);
+            margin: 0 auto 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-point:hover .timeline-dot {
+            background: var(--accent-color);
+            transform: scale(1.3);
+        }
+
+        .timeline-point.active .timeline-dot {
+            background: var(--accent-color);
+            transform: scale(1.5);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+
+        .timeline-label {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            white-space: nowrap;
+            transition: opacity 0.3s ease;
+        }
+
+        .timeline-point:hover .timeline-label,
+        .timeline-point.active .timeline-label {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+
+        /* I'm keeping the detail stubs for the click interaction, but they are empty. */
+        /* The visual timeline itself tells the story of iteration. */
+        .timeline-detail {
+            display: none;
+            padding: 1.5rem;
+            background: var(--border-color);
+            border-radius: 0.25rem;
+            border-left: 3px solid var(--accent-color);
+            margin-top: 1rem;
+        }
+
+        .timeline-detail.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .timeline-detail h4 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .timeline-detail p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .floating-theme-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 1000;
+            background: var(--border-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-family: var(--font-main);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        body:not(.light-mode) .floating-theme-toggle {
+            background: var(--border-color);
+            color: #fafafa;
+        }
+
+        body.light-mode .floating-theme-toggle {
+            background: var(--border-color);
+            color: #0a0a0a;
+        }
+
+        .floating-theme-toggle:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+            transform: scale(1.1);
+        }
+
+        .floating-theme-toggle svg { margin: 0; }
+
+        @media (max-width: 600px) {
+            .timeline-track { flex-wrap: wrap; gap: 1rem; }
+            .timeline-line { display: none; }
+            .timeline-point { flex: 0 0 calc(50% - 0.5rem); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="projects.html" class="back-link">← Back to Projects</a>
+        
+        <!-- NEW, SAFER TITLE AND SUBTITLE -->
+        <h1>Promotional Value Modeler</h1>
+        <p class="subtitle">
+            An analytical engine for modeling and quantifying the true cash value of complex casino promotions.
+        </p>
+
+        <!-- A screenshot is powerful. You can add one later. -->
+        <!-- <div class="screenshot">
+            <p class="screenshot-caption">[Placeholder for a clean screenshot of the app's interface]</p>
+        </div> -->
+
+
+        <!-- SECTION 1: PROBLEM (REMOVED QUOTES) -->
+        <h2>The Analytical Challenge: Quantifying Value</h2>
+        <p>
+            I was initially drawn to casino bonus promotions because of how generously they seemed to be giving out free money. I quickly learned that the actual value of each promotion is not immediately apparent from its brief description and that $1 of casino bonus money is not ever really worth $1 of cash.
+        </p>
+        <p>
+            Finding the actual value of a casino promotion is difficult to do and involves perfectly interpreting terms and conditions, understanding wagering requirements, and familiarizing yourself with each platform's own unique rules. The challenge was to create a tool that could model the entire system to create a plan that delivers the promotion's true cash value.
+        </p>
+
+        <!-- SECTION 2: SOLUTION -->
+        <h2>The Solution: A Prescriptive Modeling Engine</h2>
+        <p>
+            I first built a spreadsheet for deposit bonuses but later adapted this to a React app so it could handle other more complex bonus types. The final product is a complex calculator that takes the parameters of one or two different casino promotions and outputs a strategy for the optimal way to complete the offer.
+        </p>
+        <p>
+            The result is something magic and speaks for itself. It does not provide a guess nor does it recommend a 'betting strategy' where results are still affected by random chance and luck. Instead, it offers a complete plan of how much to deposit, how much to wager and on exactly what outcomes, and an exact, quantified outcome one can expect from executing the strategy correctly.
+        </p>
+        
+        <!-- SECTION 3: DETAILS -->
+        <h2>Project Details</h2>
+        <!-- UPDATED SUMMARY PARAGRAPH (PER YOUR FEEDBACK) -->
+        <p>
+            This tool evolved from a simple Excel spreadsheet for deposit bonuses into a standalone React application. I iteratively rebuilt it to handle more complex optimization logic, manage multi-promo scenarios, solve for complex gift card scaling, and implement an "Expert Mode" analysis.
+        </p>
+        
+        <!-- UPDATED "KEY DETAILS" BOX (PER YOUR FEEDBACK) -->
+        <div class="key-details">
+            <p><strong>Stack:</strong> React, JavaScript (Hooks), Babel, Tailwind CSS</p>
+            <p><strong>Core Concepts:</strong> Prescriptive Modeling, Constrained Optimization, Equilibrium Analysis, System Simulation</p>
+            <p><strong>Status:</strong> Personal R&D (Unpublished)</p>
+        </div>
+
+        <!-- SECTION 4: EVOLUTION -->
+        <h2>Development Evolution</h2>
+        <div class="timeline-container">
+            <div class="timeline-track">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-point" data-version="0">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">Excel</div>
+                </div>
+                
+                <div class="timeline-point" data-version="1">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">v0.5</div>
+                </div>
+                
+                <div class="timeline-point" data-version="2">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">v1.0</div>
+                </div>
+                
+                <div class="timeline-point" data-version="3">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">v1.1</div>
+                </div>
+                
+                <div class="timeline-point" data-version="4">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">v3.0</div>
+                </div>
+                
+                <div class="timeline-point" data-version="5">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">v4.0</div>
+                </div>
+                
+                <div class="timeline-point" data-version="6">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">v4.6</div>
+                </div>
+            </div>
+
+            <!-- FILLED-IN DETAIL PANES -->
+            <div class="timeline-detail" data-version="0">
+                <h4>Excel Spreadsheet</h4>
+                <p>The first version was a simple spreadsheet that could only model a single deposit bonus at a time.</p>
+            </div>
+            <!-- UPDATED v0.5 (PER YOUR FEEDBACK - SAFER) -->
+            <div class="timeline-detail" data-version="1">
+                <h4>First Web Version</h4>
+                <p>Migrated the logic to a React/JS app. This version incorporated a key analytical insight that significantly improved the model's potential.</p>
+            </div>
+            <div class="timeline-detail" data-version="2">
+                <h4>React Migration</h4>
+                <p>Refined the React app, implementing iterative solving techniques that would have been too clunky for Excel, solidifying the single-bonus logic.</p>
+            </div>
+            <div class="timeline-detail" data-version="3">
+                <h4>Lossback & Dual-Promo</h4>
+                <p>Expanded the engine to model 'Lossback' bonuses and, crucially, to solve for an optimal plan leveraging *two* promotions at the same time.</p>
+            </div>
+            <div class="timeline-detail" data-version="4">
+                <h4>Gift Card Integration</h4>
+                <p>Added logic to handle fixed-value inputs like casino gift cards, which introduced new and complex scaling challenges for the optimization engine.</p>
+            </div>
+            <div class="timeline-detail" data-version="5">
+                <h4>Expert Mode</h4>
+                <p>Instead of one "optimal" solution, I developed an "Expert Mode" that models and presents six different viable strategies (e.g., breakeven, max value) for a single scenario.</p>
+            </div>
+            <!-- UPDATED v4.6 (PER YOUR FEEDBACK - MOVED CASHBACK) -->
+            <div class="timeline-detail" data-version="6">
+                <h4>Current Version</h4>
+                <p>The current version includes nuanced logic for handling Baccarat's "Tie" outcome, representing the most recent stable build.</p>
+            </div>
+        </div>
+
+        <!-- SECTION 5: FUTURE (UPDATED PER YOUR FEEDBACK) -->
+        <h2>Future Development</h2>
+        <p>
+            This project is still an active intellectual exercise. I'm currently modeling the impact of debit/credit card cashback, and I plan to explore adapting this same prescriptive methodology to other complex, multi-variable games like Craps.
+        </p>
+
+        <!-- SECTION 6: PHILOSOPHY (DISCLAIMER) -->
+        <h2>Project Philosophy & Motivation</h2>
+        <p>
+            Practically speaking, this was just a fun exercise motivated by my desire to better understand casino bonuses. I was far more interested in the challenge of building the model than I was in ever using it in practice.
+        </s.5>
+        <p>
+            I get my enjoyment from *solving the puzzle* and building the analytical engine. I'm an analyst at my core, not a player.
+        </p>
+
+    </div>
+
+    <!-- Theme Toggle Button (Unchanged) -->
+    <button id="floating-theme-toggle" class="floating-theme-toggle" title="Toggle dark/light mode">
+        <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707z"/>
+        </svg>
+        <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="display:none;">
+          <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278zM4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.021 3.278 7.277 7.318 7.277a7.316 7.316 0 0 0 5.205-2.149A8.507 8.507 0 0 1 8.344 15C4.234 15 1 11.766 1 7.71 1 5.25 2.414 3.05 4.858 1.311z"/>
+        </svg>
+    </button>
+
+    <!-- JavaScript (Unchanged) -->
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('floating-theme-toggle'); 
+        const body = document.body;
+        const sunIcon = document.getElementById('theme-icon-sun');
+        const moonIcon = document.getElementById('theme-icon-moon');
+
+        function setTheme(theme) {
+            if (theme === 'light') {
+                body.classList.add('light-mode');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-mode');
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const isLight = body.classList.contains('light-mode');
+            setTheme(isLight ? 'dark' : 'light');
+        });
+
+        // Timeline interaction
+        const timelinePoints = document.querySelectorAll('.timeline-point');
+        const timelineDetails = document.querySelectorAll('.timeline-detail');
+
+        timelinePoints.forEach(point => {
+            point.addEventListener('click', () => {
+                const version = point.getAttribute('data-version');
+                
+                timelinePoints.forEach(p => p.classList.remove('active'));
+                timelineDetails.forEach(d => d.classList.remove('active'));
+                
+                point.classList.add('active');
+                const detail = document.querySelector(`.timeline-detail[data-version="${version}"]`);
+                if (detail) {
+                    detail.classList.add('active');
+                }
+            });
+        });
+        
+        // Auto-activate the first timeline point on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstPoint = document.querySelector('.timeline-point[data-version="0"]');
+            if(firstPoint) {
+                firstPoint.click();
+            }
+        });
+    </SCripT>
+
+</body>
+</html>
